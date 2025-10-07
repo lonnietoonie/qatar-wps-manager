@@ -107,6 +107,7 @@ export const parseSifCsv = (csvContent: string): { employees: Employee[]; employ
     throw new Error("Invalid SIF CSV format");
   }
 
+  // Line 0: Header record (employer info)
   const headerParts = lines[0].split(",");
   const employer: EmployerSettings = {
     employerId: headerParts[0] || "",
@@ -117,6 +118,8 @@ export const parseSifCsv = (csvContent: string): { employees: Employee[]; employ
     sifVersion: parseInt(headerParts[10]) || 1,
   };
 
+  // Line 1: Column headers - skip this line
+  // Lines 2+: Employee records
   const employees: Employee[] = [];
 
   for (let i = 2; i < lines.length; i++) {
