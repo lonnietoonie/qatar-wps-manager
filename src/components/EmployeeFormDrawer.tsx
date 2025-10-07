@@ -228,7 +228,7 @@ export const EmployeeFormDrawer = ({ open, onClose, onSave, employee }: Employee
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 mt-6">
           <div className="grid gap-4 sm:grid-cols-2">
-            <div>
+            <div className="sm:col-span-2">
               <Label htmlFor="employeeName">Employee Name * (max 70 chars)</Label>
               <Input id="employeeName" {...register("employeeName")} maxLength={70} />
               {errors.employeeName && (
