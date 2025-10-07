@@ -15,7 +15,10 @@ export const generateSifCsv = (
 
   const totalRecords = selectedEmployees.length;
 
-  // Header record
+  // Header labels (line 0)
+  const headerLabels = "Employer EID, File Creation Date, File Creation Time, Payer EID, Payer QID, Payer Bank Short Name, Payer IBAN, Salary Year and Month, Total Salaries, Total Records, SIF Version";
+
+  // Header record (line 1)
   const headerRecord = [
     employer.employerId,
     payroll.fileCreationDate,
@@ -29,6 +32,9 @@ export const generateSifCsv = (
     totalRecords.toString(),
     employer.sifVersion.toString(),
   ];
+
+  // Column headers for employee records (line 2)
+  const columnHeaders = "Record Sequence, Employee QID, Employee Visa ID, Employee Name, Employee Bank Short Name, Employee Account, Salary Frequency, Number of Working days, Net Salary, Basic Salary, Extra hours, Extra income, Deductions, Payment Type,Notes / Comments, Housing Allowance, Food Allowance, Transportation Allowance, Over Time Allowance, Deduction Reason Code, Extra Field 1, Extra Field 2";
 
   // Employee records
   const employeeRecords = selectedEmployees.map((emp, index) => {
@@ -62,7 +68,9 @@ export const generateSifCsv = (
   });
 
   const csvLines = [
+    headerLabels,
     headerRecord.join(","),
+    columnHeaders,
     ...employeeRecords.map((record) => record.join(",")),
   ];
 
@@ -76,12 +84,13 @@ export const generateSifCsv = (
 export const parseSifCsv = (csvContent: string): { employees: Employee[]; employer: EmployerSettings | null } => {
   const lines = csvContent.split(/\r?\n/).filter((line) => line.trim());
 
-  if (lines.length < 2) {
+  if (lines.length < 4) {
     throw new Error("Invalid SIF CSV format");
   }
 
-  // Line 0: Header record (employer info)
-  const headerParts = lines[0].split(",");
+  // Line 0: Header labels (skip)
+  // Line 1: Header record (employer info)
+  const headerParts = lines[1].split(",");
   const employer: EmployerSettings = {
     employerId: headerParts[0] || "",
     payerEid: headerParts[3] || "",
@@ -91,16 +100,11 @@ export const parseSifCsv = (csvContent: string): { employees: Employee[]; employ
     sifVersion: parseInt(headerParts[10]) || 1,
   };
 
-  // Check if line 1 is column headers (starts with "Record Sequence" or similar text)
-  let startIndex = 1;
-  if (lines[1] && lines[1].toLowerCase().includes("record sequence")) {
-    startIndex = 2; // Skip the column headers line
-  }
-
-  // Parse employee records
+  // Line 2: Column headers (skip)
+  // Lines 3+: Employee records
   const employees: Employee[] = [];
 
-  for (let i = startIndex; i < lines.length; i++) {
+  for (let i = 3; i < lines.length; i++) {
     const parts = lines[i].split(",");
     if (parts.length < 22) continue;
 
