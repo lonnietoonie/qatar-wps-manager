@@ -97,11 +97,11 @@ export const EmployeeTable = ({
                 <td className="px-4 py-3 text-center">{employee.workingDays}</td>
                 <td className="px-4 py-3 text-center">
                   {employee.onLeave ? (
-                    <span className="inline-flex items-center rounded-full bg-accent/10 px-2 py-1 text-xs font-medium text-accent-foreground">
+                    <span className="inline-flex items-center rounded-full bg-accent/20 px-2.5 py-1 text-xs font-medium text-accent-foreground border border-accent/30">
                       On Leave
                     </span>
                   ) : (
-                    <span className="inline-flex items-center rounded-full bg-secondary/10 px-2 py-1 text-xs font-medium text-secondary-foreground">
+                    <span className="inline-flex items-center rounded-full bg-secondary/20 px-2.5 py-1 text-xs font-medium text-secondary-foreground border border-secondary/30">
                       Active
                     </span>
                   )}
