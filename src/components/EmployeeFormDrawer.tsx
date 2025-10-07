@@ -305,8 +305,8 @@ export const EmployeeFormDrawer = ({ open, onClose, onSave, employee }: Employee
               <div>
                 <Label htmlFor="deductionReasonCode">Deduction Reason *</Label>
                 <Select
+                  value={watch("deductionReasonCode")?.toString()}
                   onValueChange={(val) => setValue("deductionReasonCode", parseInt(val) as any)}
-                  defaultValue={employee?.deductionReasonCode?.toString()}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Select reason" />
@@ -325,8 +325,8 @@ export const EmployeeFormDrawer = ({ open, onClose, onSave, employee }: Employee
             <div>
               <Label htmlFor="paymentType">Payment Type</Label>
               <Select
+                value={watch("paymentType")}
                 onValueChange={(val) => setValue("paymentType", val as PaymentType)}
-                defaultValue={employee?.paymentType || "Normal Payment"}
               >
                 <SelectTrigger>
                   <SelectValue />
@@ -409,7 +409,8 @@ export const EmployeeFormDrawer = ({ open, onClose, onSave, employee }: Employee
             <div className="sm:col-span-2 flex items-center space-x-2">
               <Checkbox
                 id="onLeave"
-                {...register("onLeave")}
+                checked={watch("onLeave")}
+                onCheckedChange={(checked) => setValue("onLeave", !!checked)}
               />
               <Label htmlFor="onLeave" className="cursor-pointer">
                 Employee is on leave (net salary will be zero)
