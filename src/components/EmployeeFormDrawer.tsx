@@ -352,22 +352,6 @@ export const EmployeeFormDrawer = ({
             </div>
 
             <div>
-              <Label htmlFor="workingDays">Working Days</Label>
-              <Input id="workingDays" type="number" {...register("workingDays", {
-              valueAsNumber: true
-            })} />
-              {errors.workingDays && <p className="text-sm text-destructive mt-1">{errors.workingDays.message}</p>}
-            </div>
-
-            <div>
-              <Label htmlFor="extraHours">Extra Hours</Label>
-              <Input id="extraHours" type="number" step="0.01" {...register("extraHours", {
-              valueAsNumber: true
-            })} />
-              {errors.extraHours && <p className="text-sm text-destructive mt-1">{errors.extraHours.message}</p>}
-            </div>
-
-            <div>
               <Label htmlFor="extraIncome">Extra Income</Label>
               <Input id="extraIncome" type="number" step="0.01" {...register("extraIncome", {
               valueAsNumber: true
@@ -395,11 +379,30 @@ export const EmployeeFormDrawer = ({
             </div>
 
             <div className="sm:col-span-2">
-              <Label htmlFor="notes">
-                Notes / Comments {watch("deductionReasonCode") === 99 && "* (Required for 'Other' reason)"} (max 300 chars)
-              </Label>
-              <Input id="notes" {...register("notes")} maxLength={300} />
-              {errors.notes && <p className="text-sm text-destructive mt-1">{errors.notes.message}</p>}
+              <Label>Additional Information</Label>
+              <div className="grid gap-3 sm:grid-cols-2 mt-2">
+                <div>
+                  <Label htmlFor="workingDays" className="text-sm">Working Days</Label>
+                  <Input id="workingDays" type="number" {...register("workingDays", {
+                  valueAsNumber: true
+                })} />
+                  {errors.workingDays && <p className="text-sm text-destructive mt-1">{errors.workingDays.message}</p>}
+                </div>
+                <div>
+                  <Label htmlFor="extraHours" className="text-sm">Extra Hours</Label>
+                  <Input id="extraHours" type="number" step="0.01" {...register("extraHours", {
+                  valueAsNumber: true
+                })} />
+                  {errors.extraHours && <p className="text-sm text-destructive mt-1">{errors.extraHours.message}</p>}
+                </div>
+                <div className="sm:col-span-2">
+                  <Label htmlFor="notes" className="text-sm">
+                    Notes / Comments {watch("deductionReasonCode") === 99 && "* (Required for 'Other' reason)"} (max 300 chars)
+                  </Label>
+                  <Input id="notes" {...register("notes")} maxLength={300} />
+                  {errors.notes && <p className="text-sm text-destructive mt-1">{errors.notes.message}</p>}
+                </div>
+              </div>
             </div>
 
             <div className="sm:col-span-2 flex items-center space-x-2">
