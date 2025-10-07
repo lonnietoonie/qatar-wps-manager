@@ -111,6 +111,26 @@ export default function Wps() {
       return;
     }
 
+    // Check for mixed salary frequencies
+    const frequencies = new Set(selectedEmployees.map(e => e.salaryFrequency));
+    if (frequencies.size > 1) {
+      const frequencyCounts = selectedEmployees.reduce((acc, emp) => {
+        acc[emp.salaryFrequency] = (acc[emp.salaryFrequency] || 0) + 1;
+        return acc;
+      }, {} as Record<string, number>);
+      
+      const frequencyDetails = Object.entries(frequencyCounts)
+        .map(([freq, count]) => `${freq === "M" ? "Monthly" : "Bi-weekly"}: ${count}`)
+        .join(", ");
+      
+      toast({
+        title: "Mixed salary frequencies detected",
+        description: `It is recommended to specify salaries of one frequency type in one SIF file. You have ${frequencyDetails}. Please select employees with the same frequency.`,
+        variant: "destructive",
+      });
+      return;
+    }
+
     // Validate all selected employees against SIF requirements
     const employeeValidationErrors: { name: string; errors: string[] }[] = [];
     selectedEmployees.forEach((emp) => {

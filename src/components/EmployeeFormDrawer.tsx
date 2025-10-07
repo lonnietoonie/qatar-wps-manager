@@ -47,6 +47,7 @@ const employeeSchema = z.object({
     { message: "Visa ID must be 12 characters or less" }
   ),
   employeeIban: z.string().min(1, "IBAN is required").refine(validateIban, "Invalid IBAN format or checksum"),
+  salaryFrequency: z.enum(["M", "B"], { required_error: "Salary frequency is required" }),
   workingDays: z.number().min(0, "Working days cannot be negative").max(999, "Working days must be 999 or less"),
   basicSalary: z.number().positive("Basic salary must be greater than zero"),
   extraHours: z.number().min(0, "Extra hours cannot be negative").max(999.99, "Extra hours must be 999.99 or less"),
@@ -109,6 +110,7 @@ export const EmployeeFormDrawer = ({ open, onClose, onSave, employee }: Employee
     defaultValues: {
       employeeName: "",
       employeeShortName: "",
+      salaryFrequency: "M" as "M" | "B",
       workingDays: 22,
       basicSalary: 0,
       extraHours: 0,
@@ -144,6 +146,7 @@ export const EmployeeFormDrawer = ({ open, onClose, onSave, employee }: Employee
         employeeQid: employee.employeeQid,
         employeeVisaId: employee.employeeVisaId,
         employeeIban: employee.employeeIban,
+        salaryFrequency: employee.salaryFrequency,
         workingDays: employee.workingDays,
         basicSalary: employee.basicSalary,
         extraHours: employee.extraHours,
@@ -165,6 +168,7 @@ export const EmployeeFormDrawer = ({ open, onClose, onSave, employee }: Employee
       reset({
         employeeName: "",
         employeeShortName: "",
+        salaryFrequency: "M" as "M" | "B",
         workingDays: 22,
         basicSalary: 0,
         extraHours: 0,
@@ -190,7 +194,7 @@ export const EmployeeFormDrawer = ({ open, onClose, onSave, employee }: Employee
       employeeQid: data.employeeQid,
       employeeVisaId: data.employeeVisaId,
       employeeIban: data.employeeIban,
-      salaryFrequency: "M",
+      salaryFrequency: data.salaryFrequency,
       workingDays: data.workingDays,
       basicSalary: data.basicSalary,
       extraHours: data.extraHours,
@@ -292,6 +296,25 @@ export const EmployeeFormDrawer = ({ open, onClose, onSave, employee }: Employee
               <Input id="employeeIban" {...register("employeeIban")} placeholder="QA58DOHB00001234567890ABCDEFG" />
               {errors.employeeIban && (
                 <p className="text-sm text-destructive mt-1">{errors.employeeIban.message}</p>
+              )}
+            </div>
+
+            <div>
+              <Label htmlFor="salaryFrequency">Salary Frequency *</Label>
+              <Select
+                value={watch("salaryFrequency")}
+                onValueChange={(val) => setValue("salaryFrequency", val as "M" | "B")}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="M">M – Monthly</SelectItem>
+                  <SelectItem value="B">B – Bi-weekly</SelectItem>
+                </SelectContent>
+              </Select>
+              {errors.salaryFrequency && (
+                <p className="text-sm text-destructive mt-1">{errors.salaryFrequency.message}</p>
               )}
             </div>
 

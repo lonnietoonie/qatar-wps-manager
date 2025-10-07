@@ -26,7 +26,7 @@ export interface Employee {
   employeeQid?: string;
   employeeVisaId?: string;
   employeeIban: string;
-  salaryFrequency: "M";
+  salaryFrequency: "M" | "B";
   workingDays: number;
   basicSalary: number;
   extraHours: number;
