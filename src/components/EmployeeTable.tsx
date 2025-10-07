@@ -64,7 +64,6 @@ export const EmployeeTable = ({
               <th className="h-12 px-4 text-right align-middle font-medium">Deductions</th>
               <th className="h-12 px-4 text-right align-middle font-medium">Net Salary</th>
               <th className="h-12 px-4 text-center align-middle font-medium">Days</th>
-              <th className="h-12 px-4 text-center align-middle font-medium">Status</th>
               <th className="h-12 px-4 text-center align-middle font-medium">Actions</th>
             </tr>
           </thead>
@@ -95,17 +94,6 @@ export const EmployeeTable = ({
                   {calculateNetSalary(employee).toFixed(2)}
                 </td>
                 <td className="px-4 py-3 text-center">{employee.workingDays}</td>
-                <td className="px-4 py-3 text-center">
-                  {employee.onLeave ? (
-                    <span className="inline-flex items-center rounded-full bg-accent/20 px-2.5 py-1 text-xs font-medium text-accent-foreground border border-accent/30">
-                      On Leave
-                    </span>
-                  ) : (
-                    <span className="inline-flex items-center rounded-full bg-secondary/20 px-2.5 py-1 text-xs font-medium text-secondary-foreground border border-secondary/30">
-                      Active
-                    </span>
-                  )}
-                </td>
                 <td className="px-4 py-3 text-center">
                   <Button
                     variant="ghost"
