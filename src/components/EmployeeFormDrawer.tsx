@@ -323,7 +323,7 @@ export const EmployeeFormDrawer = ({
             </div>
 
             <div>
-              <Label htmlFor="extraHours">Extra Hours (0-999.99)</Label>
+              <Label htmlFor="extraHours">Extra Hours</Label>
               <Input id="extraHours" type="number" step="0.01" {...register("extraHours", {
               valueAsNumber: true
             })} />
