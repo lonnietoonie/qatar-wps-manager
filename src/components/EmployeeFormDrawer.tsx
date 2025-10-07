@@ -292,18 +292,48 @@ export const EmployeeFormDrawer = ({
               {errors.employeeIban && <p className="text-sm text-destructive mt-1">{errors.employeeIban.message}</p>}
             </div>
 
-            <div>
-              <Label htmlFor="salaryFrequency">Salary Frequency *</Label>
-              <Select value={watch("salaryFrequency")} onValueChange={val => setValue("salaryFrequency", val as "M" | "B")}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="M">M – Monthly</SelectItem>
-                  <SelectItem value="B">B – Bi-weekly</SelectItem>
-                </SelectContent>
-              </Select>
-              {errors.salaryFrequency && <p className="text-sm text-destructive mt-1">{errors.salaryFrequency.message}</p>}
+            <div className="sm:col-span-2">
+              <Label>Compensation</Label>
+              <div className="grid gap-3 sm:grid-cols-2 mt-2">
+                <div>
+                  <Label htmlFor="basicSalary" className="text-sm">Basic Salary *</Label>
+                  <Input id="basicSalary" type="number" step="0.01" {...register("basicSalary", {
+                  valueAsNumber: true
+                })} />
+                  {errors.basicSalary && <p className="text-sm text-destructive mt-1">{errors.basicSalary.message}</p>}
+                </div>
+                <div>
+                  <Label htmlFor="salaryFrequency" className="text-sm">Salary Frequency *</Label>
+                  <Select value={watch("salaryFrequency")} onValueChange={val => setValue("salaryFrequency", val as "M" | "B")}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="M">M – Monthly</SelectItem>
+                      <SelectItem value="B">B – Bi-weekly</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  {errors.salaryFrequency && <p className="text-sm text-destructive mt-1">{errors.salaryFrequency.message}</p>}
+                </div>
+                <div>
+                  <Label htmlFor="housingAllowance" className="text-sm">Housing</Label>
+                  <Input id="housingAllowance" type="number" step="0.01" {...register("housingAllowance", {
+                  valueAsNumber: true
+                })} />
+                </div>
+                <div>
+                  <Label htmlFor="foodAllowance" className="text-sm">Food</Label>
+                  <Input id="foodAllowance" type="number" step="0.01" {...register("foodAllowance", {
+                  valueAsNumber: true
+                })} />
+                </div>
+                <div>
+                  <Label htmlFor="transportationAllowance" className="text-sm">Transportation</Label>
+                  <Input id="transportationAllowance" type="number" step="0.01" {...register("transportationAllowance", {
+                  valueAsNumber: true
+                })} />
+                </div>
+              </div>
             </div>
 
             <div>
@@ -312,14 +342,6 @@ export const EmployeeFormDrawer = ({
               valueAsNumber: true
             })} />
               {errors.workingDays && <p className="text-sm text-destructive mt-1">{errors.workingDays.message}</p>}
-            </div>
-
-            <div>
-              <Label htmlFor="basicSalary">Basic Salary *</Label>
-              <Input id="basicSalary" type="number" step="0.01" {...register("basicSalary", {
-              valueAsNumber: true
-            })} />
-              {errors.basicSalary && <p className="text-sm text-destructive mt-1">{errors.basicSalary.message}</p>}
             </div>
 
             <div>
@@ -376,26 +398,8 @@ export const EmployeeFormDrawer = ({
             </div>
 
             <div className="sm:col-span-2">
-              <Label>Allowances</Label>
+              <Label>Additional Allowances</Label>
               <div className="grid gap-3 sm:grid-cols-3 mt-2">
-                <div>
-                  <Label htmlFor="housingAllowance" className="text-sm">Housing</Label>
-                  <Input id="housingAllowance" type="number" step="0.01" {...register("housingAllowance", {
-                  valueAsNumber: true
-                })} />
-                </div>
-                <div>
-                  <Label htmlFor="foodAllowance" className="text-sm">Food</Label>
-                  <Input id="foodAllowance" type="number" step="0.01" {...register("foodAllowance", {
-                  valueAsNumber: true
-                })} />
-                </div>
-                <div>
-                  <Label htmlFor="transportationAllowance" className="text-sm">Transportation</Label>
-                  <Input id="transportationAllowance" type="number" step="0.01" {...register("transportationAllowance", {
-                  valueAsNumber: true
-                })} />
-                </div>
                 <div>
                   <Label htmlFor="overtimeAllowance" className="text-sm">Overtime</Label>
                   <Input id="overtimeAllowance" type="number" step="0.01" {...register("overtimeAllowance", {
