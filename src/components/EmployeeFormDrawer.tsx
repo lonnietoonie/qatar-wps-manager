@@ -43,7 +43,7 @@ const employeeSchema = z.object({
   extraIncome: z.number().min(0),
   deductions: z.number().min(0),
   deductionReasonCode: z.number().optional(),
-  paymentType: z.enum(["Salary", "Settlement"]),
+  paymentType: z.enum(["Normal Payment", "Settlement Payment", "Partial Payment", "Delayed Payment", "Final Settlement"]),
   notes: z.string().optional(),
   housingAllowance: z.number().min(0),
   foodAllowance: z.number().min(0),
@@ -76,7 +76,7 @@ export const EmployeeFormDrawer = ({ open, onClose, onSave, employee }: Employee
       extraHours: 0,
       extraIncome: 0,
       deductions: 0,
-      paymentType: "Salary",
+      paymentType: "Normal Payment",
       housingAllowance: 0,
       foodAllowance: 0,
       transportationAllowance: 0,
@@ -131,7 +131,7 @@ export const EmployeeFormDrawer = ({ open, onClose, onSave, employee }: Employee
         extraHours: 0,
         extraIncome: 0,
         deductions: 0,
-        paymentType: "Salary",
+        paymentType: "Normal Payment",
         housingAllowance: 0,
         foodAllowance: 0,
         transportationAllowance: 0,
@@ -326,14 +326,17 @@ export const EmployeeFormDrawer = ({ open, onClose, onSave, employee }: Employee
               <Label htmlFor="paymentType">Payment Type</Label>
               <Select
                 onValueChange={(val) => setValue("paymentType", val as PaymentType)}
-                defaultValue={employee?.paymentType || "Salary"}
+                defaultValue={employee?.paymentType || "Normal Payment"}
               >
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="Salary">Salary</SelectItem>
-                  <SelectItem value="Settlement">Settlement</SelectItem>
+                  <SelectItem value="Normal Payment">Normal Payment</SelectItem>
+                  <SelectItem value="Settlement Payment">Settlement Payment</SelectItem>
+                  <SelectItem value="Partial Payment">Partial Payment</SelectItem>
+                  <SelectItem value="Delayed Payment">Delayed Payment</SelectItem>
+                  <SelectItem value="Final Settlement">Final Settlement</SelectItem>
                 </SelectContent>
               </Select>
             </div>

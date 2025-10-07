@@ -1,4 +1,4 @@
-import { Employee, EmployerSettings, PayrollRun } from "@/types/employee";
+import { Employee, EmployerSettings, PayrollRun, PaymentType } from "@/types/employee";
 import { calculateNetSalary } from "./validation";
 import { v4 as uuidv4 } from "uuid";
 
@@ -46,7 +46,7 @@ export const generateSifCsv = (
       emp.employeeQid || "",
       emp.employeeVisaId || "",
       emp.employeeName,
-      "", // Employee Bank Short Name - typically empty or from IBAN
+      emp.employeeShortName || "", // Employee Bank Short Name
       emp.employeeIban,
       emp.salaryFrequency,
       emp.workingDays.toString(),
@@ -111,7 +111,7 @@ export const parseSifCsv = (csvContent: string): { employees: Employee[]; employ
     const employee: Employee = {
       employeeId: uuidv4(),
       employeeName: parts[3] || "",
-      employeeShortName: undefined,
+      employeeShortName: parts[4] || undefined,
       employeeQid: parts[1] || undefined,
       employeeVisaId: parts[2] || undefined,
       employeeIban: parts[5] || "",
@@ -122,7 +122,7 @@ export const parseSifCsv = (csvContent: string): { employees: Employee[]; employ
       extraIncome: parseFloat(parts[11]) || 0,
       deductions: parseFloat(parts[12]) || 0,
       deductionReasonCode: parts[19] && parts[19] !== "0" ? (parseInt(parts[19]) as any) : undefined,
-      paymentType: parts[13] === "Settlement" ? "Settlement" : "Salary",
+      paymentType: (parts[13] || "Normal Payment") as PaymentType,
       notes: parts[14] || undefined,
       allowances: {
         housing: parseFloat(parts[15]) || 0,

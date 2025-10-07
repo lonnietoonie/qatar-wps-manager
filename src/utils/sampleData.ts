@@ -15,7 +15,7 @@ export const getSampleEmployees = (): Employee[] => [
     extraIncome: 0,
     deductions: 500,
     deductionReasonCode: 4,
-    paymentType: "Salary",
+    paymentType: "Normal Payment",
     notes: "Regular employee",
     allowances: {
       housing: 3000,
@@ -39,7 +39,7 @@ export const getSampleEmployees = (): Employee[] => [
     extraHours: 10,
     extraIncome: 500,
     deductions: 0,
-    paymentType: "Salary",
+    paymentType: "Normal Payment",
     notes: "",
     allowances: {
       housing: 2500,
@@ -63,7 +63,7 @@ export const getSampleEmployees = (): Employee[] => [
     extraHours: 0,
     extraIncome: 0,
     deductions: 0,
-    paymentType: "Salary",
+    paymentType: "Normal Payment",
     notes: "On annual leave",
     allowances: {
       housing: 1500,

@@ -17,7 +17,7 @@ export const DEDUCTION_REASON_LABELS: Record<DeductionReasonCode, string> = {
   99: "Other",
 };
 
-export type PaymentType = "Salary" | "Settlement";
+export type PaymentType = "Normal Payment" | "Settlement Payment" | "Partial Payment" | "Delayed Payment" | "Final Settlement";
 
 export interface Employee {
   employeeId: string;
