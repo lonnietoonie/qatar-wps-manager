@@ -27,6 +27,7 @@ export default function Wps() {
     employer || {
       employerId: "",
       payerEid: "",
+      payerQid: "",
       payerBankShortName: "",
       payerIban: "",
       sifVersion: 1,
@@ -199,6 +200,18 @@ export default function Wps() {
                   value={employerSettings.payerEid}
                   onChange={(e) =>
                     setEmployerSettings({ ...employerSettings, payerEid: e.target.value })
+                  }
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="payerQid">Payer QID</Label>
+                <Input
+                  id="payerQid"
+                  placeholder="Optional"
+                  value={employerSettings.payerQid || ""}
+                  onChange={(e) =>
+                    setEmployerSettings({ ...employerSettings, payerQid: e.target.value })
                   }
                 />
               </div>

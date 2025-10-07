@@ -42,6 +42,7 @@ export interface Employee {
 export interface EmployerSettings {
   employerId: string;
   payerEid: string;
+  payerQid?: string;
   payerBankShortName: string;
   payerIban: string;
   sifVersion: number;

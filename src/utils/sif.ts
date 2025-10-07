@@ -20,8 +20,8 @@ export const generateSifCsv = (
     employer.employerId,
     payroll.fileCreationDate,
     payroll.fileCreationTime,
-    "", // empty field
     employer.payerEid,
+    employer.payerQid || "",
     employer.payerBankShortName,
     employer.payerIban,
     payroll.salaryYearMonth,
@@ -110,7 +110,8 @@ export const parseSifCsv = (csvContent: string): { employees: Employee[]; employ
   const headerParts = lines[0].split(",");
   const employer: EmployerSettings = {
     employerId: headerParts[0] || "",
-    payerEid: headerParts[4] || "",
+    payerEid: headerParts[3] || "",
+    payerQid: headerParts[4] || undefined,
     payerBankShortName: headerParts[5] || "",
     payerIban: headerParts[6] || "",
     sifVersion: parseInt(headerParts[10]) || 1,
