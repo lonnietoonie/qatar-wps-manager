@@ -303,6 +303,21 @@ export const EmployeeFormDrawer = ({
                   {errors.basicSalary && <p className="text-sm text-destructive mt-1">{errors.basicSalary.message}</p>}
                 </div>
                 <div>
+                  <Label htmlFor="paymentType" className="text-sm">Payment Type</Label>
+                  <Select value={watch("paymentType")} onValueChange={val => setValue("paymentType", val as PaymentType)}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Normal Payment">Normal Payment</SelectItem>
+                      <SelectItem value="Settlement Payment">Settlement Payment</SelectItem>
+                      <SelectItem value="Partial Payment">Partial Payment</SelectItem>
+                      <SelectItem value="Delayed Payment">Delayed Payment</SelectItem>
+                      <SelectItem value="Final Settlement">Final Settlement</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
                   <Label htmlFor="salaryFrequency" className="text-sm">Salary Frequency *</Label>
                   <Select value={watch("salaryFrequency")} onValueChange={val => setValue("salaryFrequency", val as "M" | "B")}>
                     <SelectTrigger>
@@ -368,37 +383,11 @@ export const EmployeeFormDrawer = ({
 
             {deductions > 0 && <div>
                 <Label htmlFor="deductionReasonCode">Deduction Reason *</Label>
-                <Select value={watch("deductionReasonCode")?.toString()} onValueChange={val => setValue("deductionReasonCode", parseInt(val) as any)}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select reason" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {Object.entries(DEDUCTION_REASON_LABELS).map(([code, label]) => <SelectItem key={code} value={code}>
-                        {code}: {label}
-                      </SelectItem>)}
-                  </SelectContent>
-                </Select>
+...
                 {errors.deductionReasonCode && <p className="text-sm text-destructive mt-1">{errors.deductionReasonCode.message}</p>}
               </div>}
 
-            <div>
-              <Label htmlFor="paymentType">Payment Type</Label>
-              <Select value={watch("paymentType")} onValueChange={val => setValue("paymentType", val as PaymentType)}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Normal Payment">Normal Payment</SelectItem>
-                  <SelectItem value="Settlement Payment">Settlement Payment</SelectItem>
-                  <SelectItem value="Partial Payment">Partial Payment</SelectItem>
-                  <SelectItem value="Delayed Payment">Delayed Payment</SelectItem>
-                  <SelectItem value="Final Settlement">Final Settlement</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
             <div className="sm:col-span-2">
-              <Label>Additional Allowances</Label>
               <div className="grid gap-3 sm:grid-cols-3 mt-2">
                 <div>
                   <Label htmlFor="overtimeAllowance" className="text-sm">Overtime</Label>
