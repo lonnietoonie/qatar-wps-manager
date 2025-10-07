@@ -108,6 +108,7 @@ export const EmployeeFormDrawer = ({ open, onClose, onSave, employee }: Employee
     resolver: zodResolver(employeeSchema),
     defaultValues: {
       employeeName: "",
+      employeeShortName: "",
       workingDays: 22,
       basicSalary: 0,
       extraHours: 0,
@@ -163,6 +164,7 @@ export const EmployeeFormDrawer = ({ open, onClose, onSave, employee }: Employee
       setIsOtherBank(false);
       reset({
         employeeName: "",
+        employeeShortName: "",
         workingDays: 22,
         basicSalary: 0,
         extraHours: 0,
@@ -184,7 +186,7 @@ export const EmployeeFormDrawer = ({ open, onClose, onSave, employee }: Employee
     const employeeData: Employee = {
       employeeId: employee?.employeeId || "",
       employeeName: data.employeeName,
-      employeeShortName: data.employeeShortName,
+      employeeShortName: data.employeeShortName || "",
       employeeQid: data.employeeQid,
       employeeVisaId: data.employeeVisaId,
       employeeIban: data.employeeIban,
