@@ -1,5 +1,41 @@
 import { Employee, EmployerSettings } from "@/types/employee";
 
+// Field-specific validators per SIF specification
+export const validateQid = (qid: string): boolean => {
+  if (!qid) return true; // Optional if Visa ID is provided
+  return /^\d{11}$/.test(qid.trim());
+};
+
+export const validateVisaId = (visaId: string): boolean => {
+  if (!visaId) return true; // Optional if QID is provided
+  return visaId.trim().length <= 12;
+};
+
+export const validateEmployeeName = (name: string): boolean => {
+  if (!name) return false;
+  return name.trim().length > 0 && name.trim().length <= 70;
+};
+
+export const validateBankShortName = (code: string): boolean => {
+  if (!code) return false;
+  return code.trim().length > 0 && code.trim().length <= 4;
+};
+
+export const validateNotes = (notes: string | undefined, reasonCode?: number): boolean => {
+  // Notes are mandatory if deduction reason code is 99
+  if (reasonCode === 99) {
+    if (!notes || notes.trim().length === 0) return false;
+  }
+  // If provided, must be <= 300 characters
+  if (notes && notes.length > 300) return false;
+  return true;
+};
+
+export const validateExtraHours = (hours: number): boolean => {
+  // Must be between 0 and 999.99
+  return hours >= 0 && hours <= 999.99;
+};
+
 export const validateIban = (iban: string): boolean => {
   if (!iban) return false;
   
@@ -39,36 +75,78 @@ export const validateIban = (iban: string): boolean => {
 export const validateEmployee = (employee: Employee): string[] => {
   const errors: string[] = [];
 
-  if (!employee.employeeName?.trim()) {
-    errors.push("Employee name is required");
+  // Employee Name - TEXT(70), Mandatory
+  if (!validateEmployeeName(employee.employeeName)) {
+    errors.push("Employee name is required and must be 70 characters or less");
   }
 
+  // QID or Visa ID - At least one must be provided
   if (!employee.employeeQid && !employee.employeeVisaId) {
     errors.push("Either QID or Visa ID must be provided");
   }
 
-  if (!validateIban(employee.employeeIban)) {
-    errors.push("Invalid IBAN format (should be QA followed by 2 digits, 4 letters, and 21 digits)");
+  // Employee QID - NUMBER(11), Optional
+  if (employee.employeeQid && !validateQid(employee.employeeQid)) {
+    errors.push("QID must be exactly 11 digits");
   }
 
+  // Employee Visa ID - TEXT(12), Optional
+  if (employee.employeeVisaId && !validateVisaId(employee.employeeVisaId)) {
+    errors.push("Visa ID must be 12 characters or less");
+  }
+
+  // Employee Bank Short Name - TEXT(4), Mandatory
+  if (!employee.employeeShortName || !validateBankShortName(employee.employeeShortName)) {
+    errors.push("Employee bank short name is required and must be 4 characters or less");
+  }
+
+  // Employee IBAN - TEXT(29), Mandatory
+  if (!validateIban(employee.employeeIban)) {
+    errors.push("Invalid IBAN format (should be QA followed by 2 digits, 4 letters, and 21 characters)");
+  }
+
+  // Salary Frequency - CHARACTER(1), Mandatory
+  if (employee.salaryFrequency !== "M") {
+    errors.push("Salary frequency must be 'M' (Monthly)");
+  }
+
+  // Working Days - NUMBER(3), Mandatory
+  if (employee.workingDays < 0 || employee.workingDays > 999) {
+    errors.push("Working days must be between 0 and 999");
+  }
+
+  // Basic Salary - DECIMAL(18,2), Mandatory, must be > 0
   if (employee.basicSalary <= 0) {
     errors.push("Basic salary must be greater than zero");
   }
 
-  if (employee.workingDays < 0) {
-    errors.push("Working days cannot be negative");
+  // Extra Hours - DECIMAL(3,2), Mandatory
+  if (!validateExtraHours(employee.extraHours)) {
+    errors.push("Extra hours must be between 0 and 999.99");
   }
 
+  // Extra Income - DECIMAL(18,2), Mandatory (can be 0)
+  if (employee.extraIncome < 0) {
+    errors.push("Extra income cannot be negative");
+  }
+
+  // Deductions - DECIMAL(18,2), Mandatory (can be 0)
   if (employee.deductions < 0) {
     errors.push("Deductions cannot be negative");
   }
 
+  // Deduction Reason Code - NUMBER(2), Conditional (mandatory if deductions > 0)
   if (employee.deductions > 0 && !employee.deductionReasonCode) {
     errors.push("Deduction reason code is required when deductions > 0");
   }
 
-  if (employee.salaryFrequency !== "M") {
-    errors.push("Salary frequency must be 'M' (Monthly)");
+  // Notes/Comments - TEXT(300), Conditional (mandatory if reason code is 99)
+  if (!validateNotes(employee.notes, employee.deductionReasonCode)) {
+    if (employee.deductionReasonCode === 99) {
+      errors.push("Notes are required when deduction reason code is 99 (Other)");
+    } else {
+      errors.push("Notes must be 300 characters or less");
+    }
   }
 
   return errors;

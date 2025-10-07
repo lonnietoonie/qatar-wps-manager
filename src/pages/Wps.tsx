@@ -10,7 +10,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/co
 import { useAppContext } from "@/context/AppContext";
 import { EmployerSettings, PayrollRun } from "@/types/employee";
 import { generateSifCsv, downloadFile } from "@/utils/sif";
-import { validateEmployerSettings, calculateNetSalary } from "@/utils/validation";
+import { validateEmployerSettings, calculateNetSalary, validateEmployee } from "@/utils/validation";
 import { toast } from "@/hooks/use-toast";
 import { DEDUCTION_REASON_LABELS } from "@/types/employee";
 
@@ -80,6 +80,7 @@ export default function Wps() {
   }, [selectedEmployees]);
 
   const handleGenerateSif = () => {
+    // Validate employer settings
     const employerErrors = validateEmployerSettings(employerSettings);
     if (employerErrors.length > 0) {
       toast({
@@ -90,6 +91,7 @@ export default function Wps() {
       return;
     }
 
+    // Validate employee selection
     if (selectedEmployees.length === 0) {
       toast({
         title: "No employees selected",
@@ -99,12 +101,42 @@ export default function Wps() {
       return;
     }
 
+    // Validate payroll run
     if (!payrollRun.salaryYearMonth || payrollRun.salaryYearMonth.length !== 6) {
       toast({
         title: "Invalid salary month",
         description: "Salary month must be in YYYYMM format",
         variant: "destructive",
       });
+      return;
+    }
+
+    // Validate all selected employees against SIF requirements
+    const employeeValidationErrors: { name: string; errors: string[] }[] = [];
+    selectedEmployees.forEach((emp) => {
+      const errors = validateEmployee(emp);
+      if (errors.length > 0) {
+        employeeValidationErrors.push({
+          name: emp.employeeName || emp.employeeId,
+          errors,
+        });
+      }
+    });
+
+    if (employeeValidationErrors.length > 0) {
+      const errorMessage = employeeValidationErrors
+        .map((item) => `${item.name}: ${item.errors.join("; ")}`)
+        .join("\n");
+      
+      toast({
+        title: `Validation Failed for ${employeeValidationErrors.length} employee(s)`,
+        description: errorMessage.length > 200 
+          ? `${errorMessage.substring(0, 200)}... (see console for full details)`
+          : errorMessage,
+        variant: "destructive",
+      });
+      
+      console.error("Employee validation errors:", employeeValidationErrors);
       return;
     }
 

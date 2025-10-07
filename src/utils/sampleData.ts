@@ -5,7 +5,7 @@ export const getSampleEmployees = (): Employee[] => [
   {
     employeeId: uuidv4(),
     employeeName: "Ahmed Al-Mansouri",
-    employeeShortName: "A. Mansouri",
+    employeeShortName: "DBQ",
     employeeQid: "28805154321",
     employeeIban: "QA12DOHB00001234567890123456",
     salaryFrequency: "M",
@@ -30,7 +30,7 @@ export const getSampleEmployees = (): Employee[] => [
   {
     employeeId: uuidv4(),
     employeeName: "Sarah Johnson",
-    employeeShortName: "S. Johnson",
+    employeeShortName: "CBQ",
     employeeVisaId: "V9876543",
     employeeIban: "QA34COMM00009876543210987654",
     salaryFrequency: "M",
@@ -54,7 +54,7 @@ export const getSampleEmployees = (): Employee[] => [
   {
     employeeId: uuidv4(),
     employeeName: "Mohammed Hassan",
-    employeeShortName: "M. Hassan",
+    employeeShortName: "QNB",
     employeeQid: "29304255987",
     employeeIban: "QA56QATB00005555666677778888",
     salaryFrequency: "M",

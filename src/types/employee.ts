@@ -22,7 +22,7 @@ export type PaymentType = "Normal Payment" | "Settlement Payment" | "Partial Pay
 export interface Employee {
   employeeId: string;
   employeeName: string;
-  employeeShortName?: string;
+  employeeShortName: string;
   employeeQid?: string;
   employeeVisaId?: string;
   employeeIban: string;

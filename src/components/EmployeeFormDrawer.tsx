@@ -32,19 +32,29 @@ const QATAR_BANKS = [
 ];
 
 const employeeSchema = z.object({
-  employeeName: z.string().min(1, "Name is required"),
-  employeeShortName: z.string().optional(),
-  employeeQid: z.string().optional(),
-  employeeVisaId: z.string().optional(),
+  employeeName: z.string()
+    .min(1, "Employee name is required")
+    .max(70, "Employee name must be 70 characters or less"),
+  employeeShortName: z.string()
+    .min(1, "Bank short name is required")
+    .max(4, "Bank short name must be 4 characters or less"),
+  employeeQid: z.string().optional().refine(
+    (val) => !val || /^\d{11}$/.test(val),
+    { message: "QID must be exactly 11 digits" }
+  ),
+  employeeVisaId: z.string().optional().refine(
+    (val) => !val || val.length <= 12,
+    { message: "Visa ID must be 12 characters or less" }
+  ),
   employeeIban: z.string().min(1, "IBAN is required").refine(validateIban, "Invalid IBAN format or checksum"),
-  workingDays: z.number().min(0),
-  basicSalary: z.number().min(0.01, "Basic salary must be greater than zero"),
-  extraHours: z.number().min(0),
-  extraIncome: z.number().min(0),
-  deductions: z.number().min(0),
+  workingDays: z.number().min(0, "Working days cannot be negative").max(999, "Working days must be 999 or less"),
+  basicSalary: z.number().positive("Basic salary must be greater than zero"),
+  extraHours: z.number().min(0, "Extra hours cannot be negative").max(999.99, "Extra hours must be 999.99 or less"),
+  extraIncome: z.number().min(0, "Extra income cannot be negative"),
+  deductions: z.number().min(0, "Deductions cannot be negative"),
   deductionReasonCode: z.number().optional(),
   paymentType: z.enum(["Normal Payment", "Settlement Payment", "Partial Payment", "Delayed Payment", "Final Settlement"]),
-  notes: z.string().optional(),
+  notes: z.string().max(300, "Notes must be 300 characters or less").optional(),
   housingAllowance: z.number().min(0),
   foodAllowance: z.number().min(0),
   transportationAllowance: z.number().min(0),
@@ -52,10 +62,37 @@ const employeeSchema = z.object({
   extra1: z.number().min(0),
   extra2: z.number().min(0),
   onLeave: z.boolean(),
-}).refine((data) => data.employeeQid || data.employeeVisaId, {
-  message: "Either QID or Visa ID must be provided",
-  path: ["employeeQid"],
-});
+}).refine(
+  (data) => data.employeeQid || data.employeeVisaId,
+  {
+    message: "Either QID or Visa ID must be provided",
+    path: ["employeeQid"],
+  }
+).refine(
+  (data) => {
+    // If deductions > 0, deduction reason code is required
+    if (data.deductions > 0 && !data.deductionReasonCode) {
+      return false;
+    }
+    return true;
+  },
+  {
+    message: "Deduction reason code is required when deductions > 0",
+    path: ["deductionReasonCode"],
+  }
+).refine(
+  (data) => {
+    // If deduction reason code is 99, notes are mandatory
+    if (data.deductionReasonCode === 99 && (!data.notes || data.notes.trim().length === 0)) {
+      return false;
+    }
+    return true;
+  },
+  {
+    message: "Notes are required when deduction reason is 'Other' (code 99)",
+    path: ["notes"],
+  }
+);
 
 type FormValues = z.infer<typeof employeeSchema>;
 
@@ -186,28 +223,31 @@ export const EmployeeFormDrawer = ({ open, onClose, onSave, employee }: Employee
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 mt-6">
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
-              <Label htmlFor="employeeName">Employee Name *</Label>
-              <Input id="employeeName" {...register("employeeName")} />
+              <Label htmlFor="employeeName">Employee Name * (max 70 chars)</Label>
+              <Input id="employeeName" {...register("employeeName")} maxLength={70} />
               {errors.employeeName && (
                 <p className="text-sm text-destructive mt-1">{errors.employeeName.message}</p>
               )}
             </div>
 
             <div>
-              <Label htmlFor="employeeQid">Qatar ID (QID)</Label>
-              <Input id="employeeQid" {...register("employeeQid")} />
-            </div>
-
-            <div>
-              <Label htmlFor="employeeVisaId">Visa ID</Label>
-              <Input id="employeeVisaId" {...register("employeeVisaId")} />
+              <Label htmlFor="employeeQid">Qatar ID (QID) - 11 digits</Label>
+              <Input id="employeeQid" {...register("employeeQid")} maxLength={11} placeholder="12345678901" />
               {errors.employeeQid && (
                 <p className="text-sm text-destructive mt-1">{errors.employeeQid.message}</p>
               )}
             </div>
 
+            <div>
+              <Label htmlFor="employeeVisaId">Visa ID (max 12 chars)</Label>
+              <Input id="employeeVisaId" {...register("employeeVisaId")} maxLength={12} placeholder="VISA123456" />
+              {errors.employeeVisaId && (
+                <p className="text-sm text-destructive mt-1">{errors.employeeVisaId.message}</p>
+              )}
+            </div>
+
             <div className="sm:col-span-2">
-              <Label htmlFor="employeeShortName">Employee Bank Short Name</Label>
+              <Label htmlFor="employeeShortName">Employee Bank Short Name * (max 4 chars)</Label>
               <Select
                 value={isOtherBank ? "OTHER" : watch("employeeShortName") || ""}
                 onValueChange={(val) => {
@@ -234,10 +274,14 @@ export const EmployeeFormDrawer = ({ open, onClose, onSave, employee }: Employee
               </Select>
               {isOtherBank && (
                 <Input
-                  placeholder="Enter bank short code"
+                  placeholder="Enter bank short code (max 4 chars)"
                   {...register("employeeShortName")}
                   className="mt-2"
+                  maxLength={4}
                 />
+              )}
+              {errors.employeeShortName && (
+                <p className="text-sm text-destructive mt-1">{errors.employeeShortName.message}</p>
               )}
             </div>
 
@@ -250,12 +294,15 @@ export const EmployeeFormDrawer = ({ open, onClose, onSave, employee }: Employee
             </div>
 
             <div>
-              <Label htmlFor="workingDays">Working Days</Label>
+              <Label htmlFor="workingDays">Working Days (0-999)</Label>
               <Input
                 id="workingDays"
                 type="number"
                 {...register("workingDays", { valueAsNumber: true })}
               />
+              {errors.workingDays && (
+                <p className="text-sm text-destructive mt-1">{errors.workingDays.message}</p>
+              )}
             </div>
 
             <div>
@@ -272,13 +319,16 @@ export const EmployeeFormDrawer = ({ open, onClose, onSave, employee }: Employee
             </div>
 
             <div>
-              <Label htmlFor="extraHours">Extra Hours</Label>
+              <Label htmlFor="extraHours">Extra Hours (0-999.99)</Label>
               <Input
                 id="extraHours"
                 type="number"
                 step="0.01"
                 {...register("extraHours", { valueAsNumber: true })}
               />
+              {errors.extraHours && (
+                <p className="text-sm text-destructive mt-1">{errors.extraHours.message}</p>
+              )}
             </div>
 
             <div>
@@ -319,6 +369,9 @@ export const EmployeeFormDrawer = ({ open, onClose, onSave, employee }: Employee
                     ))}
                   </SelectContent>
                 </Select>
+                {errors.deductionReasonCode && (
+                  <p className="text-sm text-destructive mt-1">{errors.deductionReasonCode.message}</p>
+                )}
               </div>
             )}
 
@@ -402,8 +455,17 @@ export const EmployeeFormDrawer = ({ open, onClose, onSave, employee }: Employee
             </div>
 
             <div className="sm:col-span-2">
-              <Label htmlFor="notes">Notes / Comments</Label>
-              <Input id="notes" {...register("notes")} />
+              <Label htmlFor="notes">
+                Notes / Comments {watch("deductionReasonCode") === 99 && "* (Required for 'Other' reason)"} (max 300 chars)
+              </Label>
+              <Input 
+                id="notes" 
+                {...register("notes")} 
+                maxLength={300}
+              />
+              {errors.notes && (
+                <p className="text-sm text-destructive mt-1">{errors.notes.message}</p>
+              )}
             </div>
 
             <div className="sm:col-span-2 flex items-center space-x-2">
