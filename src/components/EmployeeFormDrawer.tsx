@@ -162,7 +162,7 @@ export const EmployeeFormDrawer = ({ open, onClose, onSave, employee }: Employee
             </div>
 
             <div>
-              <Label htmlFor="employeeShortName">Short Name</Label>
+              <Label htmlFor="employeeShortName">Employee Bank Short Name</Label>
               <Input id="employeeShortName" {...register("employeeShortName")} />
             </div>
 
