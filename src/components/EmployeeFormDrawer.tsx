@@ -9,13 +9,14 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Employee, DEDUCTION_REASON_LABELS, PaymentType } from "@/types/employee";
+import { validateIban } from "@/utils/validation";
 
 const employeeSchema = z.object({
   employeeName: z.string().min(1, "Name is required"),
   employeeShortName: z.string().optional(),
   employeeQid: z.string().optional(),
   employeeVisaId: z.string().optional(),
-  employeeIban: z.string().min(1, "IBAN is required").regex(/^QA\d{2}[A-Z]{4}\d{21}$/, "Invalid IBAN format"),
+  employeeIban: z.string().min(1, "IBAN is required").refine(validateIban, "Invalid IBAN format or checksum"),
   workingDays: z.number().min(0),
   basicSalary: z.number().min(0.01, "Basic salary must be greater than zero"),
   extraHours: z.number().min(0),

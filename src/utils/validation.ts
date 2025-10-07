@@ -2,8 +2,38 @@ import { Employee, EmployerSettings } from "@/types/employee";
 
 export const validateIban = (iban: string): boolean => {
   if (!iban) return false;
+  
+  // Clean and normalize
   const cleaned = iban.replace(/\s/g, "").toUpperCase();
-  return /^QA\d{2}[A-Z]{4}\d{21}$/.test(cleaned);
+  
+  // Check Qatar IBAN format: QA + 2 check digits + 4 bank code + 21 account number = 29 chars
+  if (!/^QA\d{2}[A-Z]{4}[A-Z0-9]{21}$/.test(cleaned)) {
+    return false;
+  }
+  
+  // MOD-97 checksum validation
+  // Move first 4 chars to end: QA58... becomes ...QA58
+  const rearranged = cleaned.slice(4) + cleaned.slice(0, 4);
+  
+  // Replace letters with numbers (A=10, B=11, ... Z=35)
+  const numericString = rearranged
+    .split('')
+    .map(char => {
+      const code = char.charCodeAt(0);
+      if (code >= 65 && code <= 90) { // A-Z
+        return (code - 55).toString(); // A=10, B=11, etc.
+      }
+      return char;
+    })
+    .join('');
+  
+  // Calculate mod 97
+  let remainder = 0;
+  for (let i = 0; i < numericString.length; i++) {
+    remainder = (remainder * 10 + parseInt(numericString[i])) % 97;
+  }
+  
+  return remainder === 1;
 };
 
 export const validateEmployee = (employee: Employee): string[] => {
