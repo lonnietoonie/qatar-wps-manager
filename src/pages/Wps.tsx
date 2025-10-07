@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { useAppContext } from "@/context/AppContext";
 import { EmployerSettings, PayrollRun } from "@/types/employee";
@@ -12,6 +13,26 @@ import { generateSifCsv, downloadFile } from "@/utils/sif";
 import { validateEmployerSettings, calculateNetSalary } from "@/utils/validation";
 import { toast } from "@/hooks/use-toast";
 import { DEDUCTION_REASON_LABELS } from "@/types/employee";
+
+const QATAR_BANKS = [
+  { code: "ABQ", name: "Al Ahli Bank" },
+  { code: "ARB", name: "Arab Bank" },
+  { code: "BBQ", name: "Barwa Bank" },
+  { code: "BNP", name: "BNP Paribas" },
+  { code: "CBQ", name: "Commercial Bank of Qatar" },
+  { code: "DBQ", name: "Doha Bank" },
+  { code: "HSB", name: "HSBC Bank Middle East" },
+  { code: "IBQ", name: "International Bank of Qatar" },
+  { code: "IIB", name: "Qatar International Islamic Bank" },
+  { code: "KCB", name: "Al Khaliji Bank" },
+  { code: "MAR", name: "Masref Al Rayyan Bank" },
+  { code: "MSQ", name: "Mashreq Bank" },
+  { code: "QDB", name: "Qatar Development Bank" },
+  { code: "QIB", name: "Qatar Islamic Bank" },
+  { code: "QNB", name: "Qatar National Bank" },
+  { code: "SCB", name: "Standard Chartered Bank" },
+  { code: "UBL", name: "United Bank Ltd" },
+];
 
 export default function Wps() {
   const { employees, employer, setEmployer } = useAppContext();
@@ -32,6 +53,12 @@ export default function Wps() {
       payerIban: "",
       sifVersion: 1,
     }
+  );
+
+  const [isOtherBank, setIsOtherBank] = useState(
+    employer?.payerBankShortName 
+      ? !QATAR_BANKS.some(b => b.code === employer.payerBankShortName)
+      : false
   );
 
   const [selectedEmployeeIds, setSelectedEmployeeIds] = useState<Set<string>>(
@@ -217,15 +244,41 @@ export default function Wps() {
               </div>
 
               <div>
-                <Label htmlFor="payerBankShortName">Bank Short Name (BSI) *</Label>
-                <Input
-                  id="payerBankShortName"
-                  placeholder="e.g., DBQ, QNB, CBQ"
-                  value={employerSettings.payerBankShortName}
-                  onChange={(e) =>
-                    setEmployerSettings({ ...employerSettings, payerBankShortName: e.target.value })
-                  }
-                />
+                <Label htmlFor="payerBankShortName">Payer Bank Short Name (BSI) *</Label>
+                <Select
+                  value={isOtherBank ? "OTHER" : employerSettings.payerBankShortName}
+                  onValueChange={(val) => {
+                    if (val === "OTHER") {
+                      setIsOtherBank(true);
+                      setEmployerSettings({ ...employerSettings, payerBankShortName: "" });
+                    } else {
+                      setIsOtherBank(false);
+                      setEmployerSettings({ ...employerSettings, payerBankShortName: val });
+                    }
+                  }}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select bank" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {QATAR_BANKS.map((bank) => (
+                      <SelectItem key={bank.code} value={bank.code}>
+                        {bank.name} ({bank.code})
+                      </SelectItem>
+                    ))}
+                    <SelectItem value="OTHER">Other</SelectItem>
+                  </SelectContent>
+                </Select>
+                {isOtherBank && (
+                  <Input
+                    placeholder="Enter bank short code"
+                    value={employerSettings.payerBankShortName}
+                    onChange={(e) =>
+                      setEmployerSettings({ ...employerSettings, payerBankShortName: e.target.value })
+                    }
+                    className="mt-2"
+                  />
+                )}
               </div>
 
               <div>
