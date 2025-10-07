@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -10,6 +10,26 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox";
 import { Employee, DEDUCTION_REASON_LABELS, PaymentType } from "@/types/employee";
 import { validateIban } from "@/utils/validation";
+
+const QATAR_BANKS = [
+  { code: "ABQ", name: "Al Ahli Bank" },
+  { code: "ARB", name: "Arab Bank" },
+  { code: "BBQ", name: "Barwa Bank" },
+  { code: "BNP", name: "BNP Paribas" },
+  { code: "CBQ", name: "Commercial Bank of Qatar" },
+  { code: "DBQ", name: "Doha Bank" },
+  { code: "HSB", name: "HSBC Bank Middle East" },
+  { code: "IBQ", name: "International Bank of Qatar" },
+  { code: "IIB", name: "Qatar International Islamic Bank" },
+  { code: "KCB", name: "Al Khaliji Bank" },
+  { code: "MAR", name: "Masref Al Rayyan Bank" },
+  { code: "MSQ", name: "Mashreq Bank" },
+  { code: "QDB", name: "Qatar Development Bank" },
+  { code: "QIB", name: "Qatar Islamic Bank" },
+  { code: "QNB", name: "Qatar National Bank" },
+  { code: "SCB", name: "Standard Chartered Bank" },
+  { code: "UBL", name: "United Bank Ltd" },
+];
 
 const employeeSchema = z.object({
   employeeName: z.string().min(1, "Name is required"),
@@ -67,8 +87,19 @@ export const EmployeeFormDrawer = ({ open, onClose, onSave, employee }: Employee
     },
   });
 
+  const [isOtherBank, setIsOtherBank] = useState(
+    employee?.employeeShortName 
+      ? !QATAR_BANKS.some(b => b.code === employee.employeeShortName)
+      : false
+  );
+
   useEffect(() => {
     if (employee) {
+      const employeeIsOtherBank = employee.employeeShortName 
+        ? !QATAR_BANKS.some(b => b.code === employee.employeeShortName)
+        : false;
+      setIsOtherBank(employeeIsOtherBank);
+      
       reset({
         employeeName: employee.employeeName,
         employeeShortName: employee.employeeShortName,
@@ -92,6 +123,7 @@ export const EmployeeFormDrawer = ({ open, onClose, onSave, employee }: Employee
         onLeave: employee.onLeave || false,
       });
     } else {
+      setIsOtherBank(false);
       reset({
         employeeName: "",
         workingDays: 22,
@@ -162,11 +194,6 @@ export const EmployeeFormDrawer = ({ open, onClose, onSave, employee }: Employee
             </div>
 
             <div>
-              <Label htmlFor="employeeShortName">Employee Bank Short Name</Label>
-              <Input id="employeeShortName" {...register("employeeShortName")} />
-            </div>
-
-            <div>
               <Label htmlFor="employeeQid">Qatar ID (QID)</Label>
               <Input id="employeeQid" {...register("employeeQid")} />
             </div>
@@ -176,6 +203,41 @@ export const EmployeeFormDrawer = ({ open, onClose, onSave, employee }: Employee
               <Input id="employeeVisaId" {...register("employeeVisaId")} />
               {errors.employeeQid && (
                 <p className="text-sm text-destructive mt-1">{errors.employeeQid.message}</p>
+              )}
+            </div>
+
+            <div className="sm:col-span-2">
+              <Label htmlFor="employeeShortName">Employee Bank Short Name</Label>
+              <Select
+                value={isOtherBank ? "OTHER" : watch("employeeShortName") || ""}
+                onValueChange={(val) => {
+                  if (val === "OTHER") {
+                    setIsOtherBank(true);
+                    setValue("employeeShortName", "");
+                  } else {
+                    setIsOtherBank(false);
+                    setValue("employeeShortName", val);
+                  }
+                }}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select bank" />
+                </SelectTrigger>
+                <SelectContent>
+                  {QATAR_BANKS.map((bank) => (
+                    <SelectItem key={bank.code} value={bank.code}>
+                      {bank.name} ({bank.code})
+                    </SelectItem>
+                  ))}
+                  <SelectItem value="OTHER">Other</SelectItem>
+                </SelectContent>
+              </Select>
+              {isOtherBank && (
+                <Input
+                  placeholder="Enter bank short code"
+                  {...register("employeeShortName")}
+                  className="mt-2"
+                />
               )}
             </div>
 
