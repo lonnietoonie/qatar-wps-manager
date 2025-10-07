@@ -296,13 +296,6 @@ export const EmployeeFormDrawer = ({
               <Label>Compensation</Label>
               <div className="grid gap-3 sm:grid-cols-2 mt-2">
                 <div>
-                  <Label htmlFor="basicSalary" className="text-sm">Basic Salary *</Label>
-                  <Input id="basicSalary" type="number" step="0.01" {...register("basicSalary", {
-                  valueAsNumber: true
-                })} />
-                  {errors.basicSalary && <p className="text-sm text-destructive mt-1">{errors.basicSalary.message}</p>}
-                </div>
-                <div>
                   <Label htmlFor="paymentType" className="text-sm">Payment Type</Label>
                   <Select value={watch("paymentType")} onValueChange={val => setValue("paymentType", val as PaymentType)}>
                     <SelectTrigger>
@@ -329,6 +322,13 @@ export const EmployeeFormDrawer = ({
                     </SelectContent>
                   </Select>
                   {errors.salaryFrequency && <p className="text-sm text-destructive mt-1">{errors.salaryFrequency.message}</p>}
+                </div>
+                <div>
+                  <Label htmlFor="basicSalary" className="text-sm">Basic Salary *</Label>
+                  <Input id="basicSalary" type="number" step="0.01" {...register("basicSalary", {
+                  valueAsNumber: true
+                })} />
+                  {errors.basicSalary && <p className="text-sm text-destructive mt-1">{errors.basicSalary.message}</p>}
                 </div>
                 <div>
                   <Label htmlFor="housingAllowance" className="text-sm">Housing</Label>
