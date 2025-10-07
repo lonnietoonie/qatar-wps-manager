@@ -387,27 +387,11 @@ export const EmployeeFormDrawer = ({
                 {errors.deductionReasonCode && <p className="text-sm text-destructive mt-1">{errors.deductionReasonCode.message}</p>}
               </div>}
 
-            <div className="sm:col-span-2">
-              <div className="grid gap-3 sm:grid-cols-3 mt-2">
-                <div>
-                  <Label htmlFor="overtimeAllowance" className="text-sm">Overtime</Label>
-                  <Input id="overtimeAllowance" type="number" step="0.01" {...register("overtimeAllowance", {
-                  valueAsNumber: true
-                })} />
-                </div>
-                <div>
-                  <Label htmlFor="extra1" className="text-sm">Extra 1</Label>
-                  <Input id="extra1" type="number" step="0.01" {...register("extra1", {
-                  valueAsNumber: true
-                })} />
-                </div>
-                <div>
-                  <Label htmlFor="extra2" className="text-sm">Extra 2</Label>
-                  <Input id="extra2" type="number" step="0.01" {...register("extra2", {
-                  valueAsNumber: true
-                })} />
-                </div>
-              </div>
+            <div>
+              <Label htmlFor="overtimeAllowance">Overtime Allowance</Label>
+              <Input id="overtimeAllowance" type="number" step="0.01" {...register("overtimeAllowance", {
+              valueAsNumber: true
+            })} />
             </div>
 
             <div className="sm:col-span-2">
