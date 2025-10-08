@@ -19,7 +19,7 @@ export default function Home() {
             </div>
             
             <div className="flex items-center gap-3">
-              <Button size="lg" className="hidden md:flex rounded-xl shadow-md hover:shadow-lg transition-all" onClick={() => navigate("/home")}>
+              <Button size="lg" className="hidden md:flex rounded-xl shadow-md hover:shadow-lg transition-all" onClick={() => window.open("https://github.com/lonnietoonie/qatar-wps-manager", "_blank")}>
                 <Download className="h-4 w-4 mr-2" />
                 Download
               </Button>
