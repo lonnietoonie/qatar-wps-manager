@@ -231,6 +231,4 @@ If you encounter any issues or have questions:
 
 ---
 
-**Made with ❤️ for Qatar's business community**
-
 *Note: This is an independent tool and is not officially affiliated with Qatar's Ministry of Labour or any banking institution.*
