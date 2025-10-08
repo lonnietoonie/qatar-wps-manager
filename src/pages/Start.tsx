@@ -126,7 +126,7 @@ export default function Home() {
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mb-8">
         <Card className="p-6 hover:shadow-md transition-shadow">
-          <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+          <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-primary/20 to-primary/10">
             <Upload className="h-6 w-6 text-primary" />
           </div>
           <h3 className="mb-2 text-lg font-semibold">Upload SIF CSV</h3>
@@ -147,8 +147,8 @@ export default function Home() {
         </Card>
 
         <Card className="p-6 hover:shadow-md transition-shadow">
-          <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-secondary/10">
-            <FileJson className="h-6 w-6 text-secondary" />
+          <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-primary/20 to-primary/10">
+            <FileJson className="h-6 w-6 text-primary" />
           </div>
           <h3 className="mb-2 text-lg font-semibold">Upload JSON</h3>
           <p className="mb-4 text-sm text-muted-foreground">
@@ -168,8 +168,8 @@ export default function Home() {
         </Card>
 
         <Card className="p-6 hover:shadow-md transition-shadow">
-          <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-accent/10">
-            <UserPlus className="h-6 w-6 text-accent-foreground" />
+          <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-primary/20 to-primary/10">
+            <UserPlus className="h-6 w-6 text-primary" />
           </div>
           <h3 className="mb-2 text-lg font-semibold">Create Manually</h3>
           <p className="mb-4 text-sm text-muted-foreground">
