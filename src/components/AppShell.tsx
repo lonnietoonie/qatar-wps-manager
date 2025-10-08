@@ -2,6 +2,7 @@ import { ReactNode, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { Home, Users, FileText, Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { MobileWarningDialog } from "./MobileWarningDialog";
 
 interface AppShellProps {
   children: ReactNode;
@@ -17,7 +18,9 @@ export const AppShell = ({ children }: AppShellProps) => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   return (
-    <div className="flex h-screen w-full bg-background">
+    <>
+      <MobileWarningDialog />
+      <div className="flex h-screen w-full bg-background">
       {/* Sidebar */}
       <aside
         className={cn(
@@ -74,6 +77,7 @@ export const AppShell = ({ children }: AppShellProps) => {
       <main className="flex-1 overflow-auto">
         {children}
       </main>
-    </div>
+      </div>
+    </>
   );
 };
