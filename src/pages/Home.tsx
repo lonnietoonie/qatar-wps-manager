@@ -7,7 +7,7 @@ export default function Home() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-secondary">
+    <div className="min-h-screen bg-gradient-to-b from-background via-background to-muted">
       {/* Hero Section */}
       <section className="container mx-auto max-w-5xl px-4 pt-20 pb-16 md:pt-32 md:pb-24">
         <div className="max-w-3xl">
@@ -83,7 +83,7 @@ export default function Home() {
 
       {/* Privacy First Section */}
       <section className="container mx-auto max-w-5xl px-4 py-16 md:py-24">
-        <Card className="p-10 md:p-12 bg-muted border-2">
+        <Card className="p-10 md:p-12 bg-primary/5 border-primary/20">
           <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
             <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 flex-shrink-0">
               <Shield className="h-8 w-8 text-primary" />
