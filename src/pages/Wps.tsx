@@ -333,7 +333,7 @@ export default function Wps() {
                 )}
               </div>
 
-              <div>
+              <div className="hidden">
                 <Label htmlFor="sifVersion">SIF Version</Label>
                 <Input id="sifVersion" value="1" disabled />
               </div>
