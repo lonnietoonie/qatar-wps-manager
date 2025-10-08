@@ -2,7 +2,7 @@
 
 > A privacy-first, browser-based tool for managing Qatar WPS (Wage Protection System) payroll files
 
-[![Live Demo](https://img.shields.io/badge/demo-live-brightgreen)](https://lovable.dev/projects/50952490-6762-4193-aced-98205f4c0293)
+[![Live Demo](https://img.shields.io/badge/demo-live-brightgreen)](https://wps.karakum.co.uk)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 ## 📋 Overview
@@ -27,7 +27,7 @@ Qatar WPS Manager is a free, open-source web application designed to simplify th
 ### Option 1: Use the Hosted Version (Recommended)
 
 Simply visit the live application:
-**[https://lovable.dev/projects/50952490-6762-4193-aced-98205f4c0293](https://lovable.dev/projects/50952490-6762-4193-aced-98205f4c0293)**
+**[https://wps.karakum.co.uk](https://wps.karakum.co.uk)**
 
 No installation, no setup - just start managing your WPS files immediately!
 
@@ -221,7 +221,6 @@ If you encounter any issues or have questions:
 
 1. Check the [Issues](https://github.com/yourusername/qatar-wps-manager/issues) page
 2. Create a new issue with detailed information
-3. Visit the [Lovable Community](https://discord.com/channels/1119885301872070706/1280461670979993613) for discussions
 
 ## 🙏 Acknowledgments
 
