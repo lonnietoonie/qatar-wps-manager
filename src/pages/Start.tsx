@@ -115,9 +115,9 @@ export default function Home() {
       {hasExistingData && (
         <Alert className="mb-6">
           <AlertCircle className="h-4 w-4" />
-          <AlertDescription className="flex items-center justify-between">
-            <span>You have an existing session. Continue working or start fresh.</span>
-            <Button variant="outline" size="sm" onClick={handleClearAndRestart}>
+          <AlertDescription className="flex items-center justify-between gap-4">
+            <span className="flex-1">You have an existing session. Continue working or start fresh.</span>
+            <Button variant="outline" size="sm" onClick={handleClearAndRestart} className="shrink-0">
               Clear & Restart
             </Button>
           </AlertDescription>
