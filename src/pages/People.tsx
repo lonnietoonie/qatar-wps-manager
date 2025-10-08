@@ -113,8 +113,8 @@ export default function People() {
   return (
     <div className="container mx-auto px-4 py-6">
       <div className="mb-6">
-        <h1 className="text-3xl font-bold mb-2">Employees</h1>
-        <p className="text-muted-foreground">
+        <h1 className="text-2xl md:text-3xl font-bold mb-2">Employees</h1>
+        <p className="text-sm md:text-base text-muted-foreground">
           Manage your company staff with spreadsheet-like inline editing
         </p>
       </div>

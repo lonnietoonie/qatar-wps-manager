@@ -199,10 +199,10 @@ export default function Wps() {
 
   return (
     <div className="container mx-auto px-4 py-6">
-      <div className="mb-6 flex items-center justify-between">
+      <div className="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold mb-2">WPS Payroll Generator</h1>
-          <p className="text-muted-foreground">Generate SIF CSV files for salary payments</p>
+          <h1 className="text-2xl md:text-3xl font-bold mb-2">WPS Payroll Generator</h1>
+          <p className="text-sm md:text-base text-muted-foreground">Generate SIF CSV files for salary payments</p>
         </div>
 
         <Sheet>

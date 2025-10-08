@@ -22,16 +22,16 @@ export const AppShell = ({ children }: AppShellProps) => {
       <aside
         className={cn(
           "flex flex-col border-r border-sidebar-border bg-sidebar transition-all duration-300",
-          sidebarOpen ? "w-64" : "w-0 md:w-16"
+          sidebarOpen ? "w-64" : "w-16"
         )}
       >
-        <div className="flex h-16 items-center justify-between border-b border-sidebar-border px-4">
+        <div className="flex h-16 items-center justify-between border-b border-sidebar-border px-2 md:px-4">
           {sidebarOpen && (
-            <h1 className="text-lg font-semibold text-sidebar-foreground">WPS Manager</h1>
+            <h1 className="text-base md:text-lg font-semibold text-sidebar-foreground">WPS Manager</h1>
           )}
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="rounded-md p-2 hover:bg-sidebar-accent transition-colors"
+            className="rounded-md p-2 hover:bg-sidebar-accent transition-colors flex-shrink-0"
             aria-label="Toggle sidebar"
           >
             {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
