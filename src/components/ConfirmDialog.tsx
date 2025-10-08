@@ -15,9 +15,19 @@ interface ConfirmDialogProps {
   onConfirm: () => void;
   title: string;
   description: string;
+  confirmText?: string;
+  destructive?: boolean;
 }
 
-export const ConfirmDialog = ({ open, onClose, onConfirm, title, description }: ConfirmDialogProps) => {
+export const ConfirmDialog = ({ 
+  open, 
+  onClose, 
+  onConfirm, 
+  title, 
+  description,
+  confirmText = "Continue",
+  destructive = false
+}: ConfirmDialogProps) => {
   return (
     <AlertDialog open={open} onOpenChange={onClose}>
       <AlertDialogContent>
@@ -27,7 +37,12 @@ export const ConfirmDialog = ({ open, onClose, onConfirm, title, description }: 
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={onConfirm}>Continue</AlertDialogAction>
+          <AlertDialogAction 
+            onClick={onConfirm}
+            className={destructive ? "bg-destructive text-destructive-foreground hover:bg-destructive/90" : ""}
+          >
+            {confirmText}
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

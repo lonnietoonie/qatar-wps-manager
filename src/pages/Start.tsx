@@ -4,6 +4,7 @@ import { Upload, FileJson, UserPlus, Database, AlertCircle } from "lucide-react"
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { ConfirmDialog } from "@/components/ConfirmDialog";
 import { useAppContext } from "@/context/AppContext";
 import { storage } from "@/utils/storage";
 import { parseSifCsv } from "@/utils/sif";
@@ -14,6 +15,7 @@ export default function Home() {
   const navigate = useNavigate();
   const { setEmployees, setEmployer, clearAll } = useAppContext();
   const [hasExistingData] = useState(storage.hasData());
+  const [showClearConfirm, setShowClearConfirm] = useState(false);
 
   const handleSifUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -93,14 +95,13 @@ export default function Home() {
   };
 
   const handleClearAndRestart = () => {
-    if (confirm("Are you sure? This will clear all data and cannot be undone.")) {
-      clearAll();
-      toast({
-        title: "Data cleared",
-        description: "All data has been removed",
-      });
-      window.location.reload();
-    }
+    clearAll();
+    toast({
+      title: "Data cleared",
+      description: "All data has been removed",
+    });
+    setShowClearConfirm(false);
+    window.location.reload();
   };
 
   return (
@@ -117,12 +118,27 @@ export default function Home() {
           <AlertCircle className="h-4 w-4" />
           <AlertDescription className="flex items-center justify-between gap-4">
             <span className="flex-1">You have an existing session. Continue working or start fresh.</span>
-            <Button variant="outline" size="sm" onClick={handleClearAndRestart} className="shrink-0">
+            <Button 
+              variant="destructive" 
+              size="sm" 
+              onClick={() => setShowClearConfirm(true)} 
+              className="shrink-0"
+            >
               Clear & Restart
             </Button>
           </AlertDescription>
         </Alert>
       )}
+
+      <ConfirmDialog
+        open={showClearConfirm}
+        onClose={() => setShowClearConfirm(false)}
+        onConfirm={handleClearAndRestart}
+        title="Clear all data?"
+        description="This will permanently delete all employee data and employer settings. This action cannot be undone."
+        confirmText="Yes, clear data"
+        destructive
+      />
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mb-8">
         <Card className="p-6 hover:shadow-md transition-shadow">
