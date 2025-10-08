@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AppProvider } from "./context/AppContext";
 import { AppShell } from "./components/AppShell";
 import Home from "./pages/Home";
+import Start from "./pages/Start";
 import People from "./pages/People";
 import Wps from "./pages/Wps";
 import NotFound from "./pages/NotFound";
@@ -20,7 +21,8 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<AppShell><Home /></AppShell>} />
+            <Route path="/" element={<Home />} />
+            <Route path="/home" element={<AppShell><Start /></AppShell>} />
             <Route path="/people" element={<AppShell><People /></AppShell>} />
             <Route path="/wps" element={<AppShell><Wps /></AppShell>} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

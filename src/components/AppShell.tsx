@@ -8,7 +8,7 @@ interface AppShellProps {
 }
 
 const navItems = [
-  { to: "/", icon: Home, label: "Home" },
+  { to: "/home", icon: Home, label: "Home" },
   { to: "/people", icon: Users, label: "People" },
   { to: "/wps", icon: FileText, label: "WPS" },
 ];
@@ -43,7 +43,7 @@ export const AppShell = ({ children }: AppShellProps) => {
             <NavLink
               key={item.to}
               to={item.to}
-              end={item.to === "/"}
+              end={item.to === "/home"}
               className={({ isActive }) =>
                 cn(
                   "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors",

@@ -1,208 +1,124 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Upload, FileJson, UserPlus, Database, AlertCircle } from "lucide-react";
+import { ArrowRight, Upload, Edit3, Download, Shield, Github } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { useAppContext } from "@/context/AppContext";
-import { storage } from "@/utils/storage";
-import { parseSifCsv } from "@/utils/sif";
-import { getSampleEmployees, getSampleEmployer } from "@/utils/sampleData";
-import { toast } from "@/hooks/use-toast";
 
 export default function Home() {
   const navigate = useNavigate();
-  const { setEmployees, setEmployer, clearAll } = useAppContext();
-  const [hasExistingData] = useState(storage.hasData());
-
-  const handleSifUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      try {
-        const content = e.target?.result as string;
-        const { employees, employer } = parseSifCsv(content);
-        
-        setEmployees(employees);
-        if (employer) setEmployer(employer);
-        
-        toast({
-          title: "SIF CSV imported successfully",
-          description: `Loaded ${employees.length} employees`,
-        });
-        
-        navigate("/people");
-      } catch (error) {
-        toast({
-          title: "Import failed",
-          description: error instanceof Error ? error.message : "Invalid file format",
-          variant: "destructive",
-        });
-      }
-    };
-    reader.readAsText(file);
-    event.target.value = "";
-  };
-
-  const handleJsonUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      try {
-        const content = e.target?.result as string;
-        const employees = JSON.parse(content);
-        
-        if (!Array.isArray(employees)) {
-          throw new Error("Invalid JSON format: expected an array of employees");
-        }
-        
-        setEmployees(employees);
-        
-        toast({
-          title: "JSON imported successfully",
-          description: `Loaded ${employees.length} employees`,
-        });
-        
-        navigate("/people");
-      } catch (error) {
-        toast({
-          title: "Import failed",
-          description: error instanceof Error ? error.message : "Invalid JSON format",
-          variant: "destructive",
-        });
-      }
-    };
-    reader.readAsText(file);
-    event.target.value = "";
-  };
-
-  const handleLoadSampleData = () => {
-    setEmployees(getSampleEmployees());
-    setEmployer(getSampleEmployer());
-    
-    toast({
-      title: "Sample data loaded",
-      description: "3 sample employees and employer settings loaded",
-    });
-    
-    navigate("/people");
-  };
-
-  const handleClearAndRestart = () => {
-    if (confirm("Are you sure? This will clear all data and cannot be undone.")) {
-      clearAll();
-      toast({
-        title: "Data cleared",
-        description: "All data has been removed",
-      });
-      window.location.reload();
-    }
-  };
 
   return (
-    <div className="container mx-auto max-w-4xl px-4 py-8">
-      <div className="mb-8 text-center">
-        <h1 className="mb-2 text-4xl font-bold text-foreground">Qatar WPS Manager</h1>
-        <p className="text-lg text-muted-foreground">
-          Generate SIF payroll files for the Wage Protection System
-        </p>
-      </div>
-
-      {hasExistingData && (
-        <Alert className="mb-6">
-          <AlertCircle className="h-4 w-4" />
-          <AlertDescription className="flex items-center justify-between">
-            <span>You have an existing session. Continue working or start fresh.</span>
-            <Button variant="outline" size="sm" onClick={handleClearAndRestart}>
-              Clear & Restart
-            </Button>
-          </AlertDescription>
-        </Alert>
-      )}
-
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mb-8">
-        <Card className="p-6 hover:shadow-md transition-shadow">
-          <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
-            <Upload className="h-6 w-6 text-primary" />
-          </div>
-          <h3 className="mb-2 text-lg font-semibold">Upload SIF CSV</h3>
-          <p className="mb-4 text-sm text-muted-foreground">
-            Import an existing WPS SIF file to pre-fill employee data
+    <div className="min-h-screen bg-gradient-to-b from-background to-secondary">
+      {/* Hero Section */}
+      <section className="container mx-auto max-w-5xl px-4 pt-20 pb-16 md:pt-32 md:pb-24">
+        <div className="max-w-3xl">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-6 leading-tight">
+            Manage your employees and generate your WPS SIF file — safely in your browser.
+          </h1>
+          <p className="text-lg md:text-xl text-muted-foreground mb-8 leading-relaxed">
+            No logins. No servers. No data sent anywhere. Qatar WPS Manager lets you handle 
+            payroll securely, directly in your browser — your data disappears the moment you 
+            close the tab.
           </p>
-          <label className="block">
-            <input
-              type="file"
-              accept=".csv"
-              onChange={handleSifUpload}
-              className="hidden"
-            />
-            <Button variant="outline" className="w-full" asChild>
-              <span>Choose File</span>
+          <div className="flex flex-col sm:flex-row gap-4">
+            <Button 
+              size="lg" 
+              className="text-lg px-8 py-6"
+              onClick={() => navigate("/home")}
+            >
+              Go to WPS Manager
+              <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
-          </label>
-        </Card>
-
-        <Card className="p-6 hover:shadow-md transition-shadow">
-          <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-secondary/10">
-            <FileJson className="h-6 w-6 text-secondary" />
-          </div>
-          <h3 className="mb-2 text-lg font-semibold">Upload JSON</h3>
-          <p className="mb-4 text-sm text-muted-foreground">
-            Import employee data from a JSON file
-          </p>
-          <label className="block">
-            <input
-              type="file"
-              accept=".json"
-              onChange={handleJsonUpload}
-              className="hidden"
-            />
-            <Button variant="outline" className="w-full" asChild>
-              <span>Choose File</span>
-            </Button>
-          </label>
-        </Card>
-
-        <Card className="p-6 hover:shadow-md transition-shadow">
-          <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-accent/10">
-            <UserPlus className="h-6 w-6 text-accent-foreground" />
-          </div>
-          <h3 className="mb-2 text-lg font-semibold">Create Manually</h3>
-          <p className="mb-4 text-sm text-muted-foreground">
-            Start with a blank slate and add employees one by one
-          </p>
-          <Button variant="outline" className="w-full" onClick={() => navigate("/people")}>
-            Get Started
-          </Button>
-        </Card>
-      </div>
-
-      <Card className="p-6 mb-8 bg-muted/30">
-        <div className="flex items-start gap-3">
-          <Database className="h-5 w-5 text-primary mt-0.5" />
-          <div>
-            <h3 className="mb-2 font-semibold">Try Sample Data</h3>
-            <p className="mb-4 text-sm text-muted-foreground">
-              Load 3 sample employees to explore the application features
-            </p>
-            <Button size="sm" onClick={handleLoadSampleData}>
-              Load Sample Data
+            <Button 
+              size="lg" 
+              variant="outline"
+              className="text-lg px-8 py-6"
+              onClick={() => {
+                document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+            >
+              Learn how it works
             </Button>
           </div>
         </div>
-      </Card>
+      </section>
 
-      <Alert>
-        <AlertCircle className="h-4 w-4" />
-        <AlertDescription>
-          <strong>Privacy Notice:</strong> All data stays in your browser. No information is sent
-          to any server. Closing this tab will clear all data permanently.
-        </AlertDescription>
-      </Alert>
+      {/* How It Works Section */}
+      <section id="how-it-works" className="container mx-auto max-w-5xl px-4 py-16 md:py-24">
+        <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-12">
+          How it works
+        </h2>
+        
+        <div className="grid gap-8 md:grid-cols-3">
+          <Card className="p-8 hover:shadow-lg transition-shadow bg-card">
+            <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-lg bg-primary/10">
+              <Upload className="h-7 w-7 text-primary" />
+            </div>
+            <h3 className="text-xl font-semibold mb-3 text-foreground">Load your data</h3>
+            <p className="text-muted-foreground leading-relaxed">
+              Upload a previous SIF file or import your employee list from a JSON file.
+            </p>
+          </Card>
+
+          <Card className="p-8 hover:shadow-lg transition-shadow bg-card">
+            <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-lg bg-primary/10">
+              <Edit3 className="h-7 w-7 text-primary" />
+            </div>
+            <h3 className="text-xl font-semibold mb-3 text-foreground">Make your updates</h3>
+            <p className="text-muted-foreground leading-relaxed">
+              Edit salaries, add new staff, or adjust payroll details in a clean, table-style view.
+            </p>
+          </Card>
+
+          <Card className="p-8 hover:shadow-lg transition-shadow bg-card">
+            <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-lg bg-primary/10">
+              <Download className="h-7 w-7 text-primary" />
+            </div>
+            <h3 className="text-xl font-semibold mb-3 text-foreground">Generate your SIF file</h3>
+            <p className="text-muted-foreground leading-relaxed">
+              Select who you're paying and instantly create a compliant SIF file — ready for upload to your bank.
+            </p>
+          </Card>
+        </div>
+      </section>
+
+      {/* Privacy First Section */}
+      <section className="container mx-auto max-w-5xl px-4 py-16 md:py-24">
+        <Card className="p-10 md:p-12 bg-muted border-2">
+          <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
+            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 flex-shrink-0">
+              <Shield className="h-8 w-8 text-primary" />
+            </div>
+            <div>
+              <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-3">
+                Privacy first
+              </h2>
+              <p className="text-lg text-muted-foreground leading-relaxed">
+                All processing happens in your browser. No data ever leaves your device. 
+                When you close the browser, your data is gone.
+              </p>
+            </div>
+          </div>
+        </Card>
+      </section>
+
+      {/* Footer */}
+      <footer className="container mx-auto max-w-5xl px-4 py-16 border-t">
+        <div className="flex items-center gap-3 text-muted-foreground">
+          <Github className="h-5 w-5" />
+          <p className="text-sm md:text-base">
+            Prefer to run it yourself?{" "}
+            <a 
+              href="https://github.com" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-primary hover:underline font-medium"
+            >
+              Download the code from our GitHub repo
+            </a>
+            .
+          </p>
+        </div>
+      </footer>
     </div>
   );
 }
