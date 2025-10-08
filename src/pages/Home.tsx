@@ -2,48 +2,87 @@ import { useNavigate } from "react-router-dom";
 import { ArrowRight, Upload, Edit3, Download, Shield, Github } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { ThemeToggle } from "@/components/ThemeToggle";
+import macbookMockup from "@/assets/macbook-mockup.png";
 
 export default function Home() {
   const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-muted to-secondary">
+      {/* Header */}
+      <header className="border-b border-border/40 bg-background/80 backdrop-blur-sm sticky top-0 z-50">
+        <nav className="container mx-auto max-w-7xl px-4 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center">
+                <span className="text-white font-bold text-sm">W</span>
+              </div>
+              <span className="text-xl font-bold text-foreground">WPS Manager</span>
+            </div>
+            
+            <div className="flex items-center gap-3">
+              <Button 
+                size="lg"
+                className="rounded-xl shadow-md hover:shadow-lg transition-all"
+                onClick={() => navigate("/home")}
+              >
+                <Download className="h-4 w-4 mr-2" />
+                Download
+              </Button>
+              <ThemeToggle />
+            </div>
+          </div>
+        </nav>
+      </header>
+
       {/* Hero Section */}
-      <section className="container mx-auto max-w-6xl px-4 pt-20 pb-16 md:pt-32 md:pb-24">
-        <div className="max-w-2xl">
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-foreground mb-6 leading-tight tracking-tight">
-            Qatar WPS Manager
-          </h1>
-          <p className="text-xl md:text-2xl text-muted-foreground mb-4 leading-relaxed font-medium">
-            Manage your employees and generate your WPS SIF file — safely in your browser.
-          </p>
-          <p className="text-base md:text-lg text-muted-foreground mb-8 leading-relaxed">
-            No logins. No servers. No data sent anywhere. All processing happens securely in your browser — your data disappears the moment you close the tab.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3">
-            <Button 
-              size="lg" 
-              className="text-base px-8 py-6 rounded-xl shadow-lg hover:shadow-xl transition-all"
-              onClick={() => navigate("/home")}
-            >
-              Get Started
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
-            <Button 
-              size="lg" 
-              variant="ghost"
-              className="text-base px-8 py-6 rounded-xl"
-              onClick={() => {
-                document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' });
-              }}
-            >
-              <span className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                  <ArrowRight className="h-4 w-4 text-primary rotate-90" />
-                </div>
-                Learn how it works
-              </span>
-            </Button>
+      <section className="container mx-auto max-w-7xl px-4 pt-20 pb-16 md:pt-32 md:pb-24">
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <div className="max-w-2xl">
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-foreground mb-6 leading-tight tracking-tight">
+              Qatar WPS Manager
+            </h1>
+            <p className="text-xl md:text-2xl text-muted-foreground mb-4 leading-relaxed font-medium">
+              Manage your employees and generate your WPS SIF file — safely in your browser.
+            </p>
+            <p className="text-base md:text-lg text-muted-foreground mb-8 leading-relaxed">
+              No logins. No servers. No data sent anywhere. All processing happens securely in your browser — your data disappears the moment you close the tab.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <Button 
+                size="lg" 
+                className="text-base px-8 py-6 rounded-xl shadow-lg hover:shadow-xl transition-all"
+                onClick={() => navigate("/home")}
+              >
+                Get Started
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+              <Button 
+                size="lg" 
+                variant="ghost"
+                className="text-base px-8 py-6 rounded-xl"
+                onClick={() => {
+                  document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' });
+                }}
+              >
+                <span className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                    <ArrowRight className="h-4 w-4 text-primary rotate-90" />
+                  </div>
+                  Learn how it works
+                </span>
+              </Button>
+            </div>
+          </div>
+          
+          {/* MacBook Mockup */}
+          <div className="hidden lg:block">
+            <img 
+              src={macbookMockup} 
+              alt="WPS Manager Application Interface" 
+              className="w-full h-auto drop-shadow-2xl"
+            />
           </div>
         </div>
       </section>

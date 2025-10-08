@@ -61,48 +61,48 @@ All colors MUST be HSL.
   }
 
   .dark {
-    --background: 222 47% 11%;
-    --foreground: 210 40% 98%;
+    --background: 240 20% 8%;
+    --foreground: 250 60% 98%;
 
-    --card: 222 47% 15%;
-    --card-foreground: 210 40% 98%;
+    --card: 240 20% 12%;
+    --card-foreground: 250 60% 98%;
 
-    --popover: 222 47% 15%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 240 20% 12%;
+    --popover-foreground: 250 60% 98%;
 
-    --primary: 230 60% 55%;
+    --primary: 250 70% 65%;
     --primary-foreground: 0 0% 100%;
-    --primary-hover: 230 60% 60%;
+    --primary-hover: 250 70% 70%;
 
-    --secondary: 174 50% 55%;
-    --secondary-foreground: 0 0% 100%;
-    --secondary-hover: 174 50% 60%;
+    --secondary: 250 30% 18%;
+    --secondary-foreground: 250 60% 98%;
+    --secondary-hover: 250 30% 22%;
 
-    --muted: 217 33% 17%;
-    --muted-foreground: 215 20% 65%;
+    --muted: 250 20% 15%;
+    --muted-foreground: 250 20% 65%;
 
-    --accent: 43 96% 60%;
-    --accent-foreground: 222 47% 11%;
+    --accent: 250 70% 65%;
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 72% 55%;
+    --destructive: 0 84% 70%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 217 33% 22%;
-    --input: 217 33% 22%;
-    --ring: 230 60% 55%;
+    --border: 250 20% 20%;
+    --input: 250 20% 18%;
+    --ring: 250 70% 65%;
 
-    --sidebar-background: 222 47% 13%;
-    --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: 230 60% 55%;
+    --sidebar-background: 240 20% 10%;
+    --sidebar-foreground: 250 60% 98%;
+    --sidebar-primary: 250 70% 65%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 217 33% 20%;
-    --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 217 33% 22%;
-    --sidebar-ring: 230 60% 55%;
+    --sidebar-accent: 250 20% 15%;
+    --sidebar-accent-foreground: 250 60% 98%;
+    --sidebar-border: 250 20% 20%;
+    --sidebar-ring: 250 70% 65%;
 
-    --table-header: 222 47% 13%;
-    --table-row-hover: 222 47% 18%;
-    --table-selected: 230 60% 25%;
+    --table-header: 240 20% 12%;
+    --table-row-hover: 240 20% 15%;
+    --table-selected: 250 70% 25%;
   }
 }
 
