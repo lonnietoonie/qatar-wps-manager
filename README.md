@@ -41,7 +41,7 @@ No installation, no setup - just start managing your WPS files immediately!
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/qatar-wps-manager.git
+git clone https://github.com/lonnietoonie/qatar-wps-manager.git
 
 # Navigate to the project directory
 cd qatar-wps-manager
@@ -219,7 +219,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 If you encounter any issues or have questions:
 
-1. Check the [Issues](https://github.com/yourusername/qatar-wps-manager/issues) page
+1. Check the [Issues](https://github.com/lonnietoonie/qatar-wps-manager/issues) page
 2. Create a new issue with detailed information
 
 ## 🙏 Acknowledgments
