@@ -367,7 +367,18 @@ export const EmployeeFormDrawer = ({
 
             {deductions > 0 && <div>
                 <Label htmlFor="deductionReasonCode">Deduction Reason *</Label>
-...
+                <Select value={watch("deductionReasonCode")?.toString() || ""} onValueChange={val => setValue("deductionReasonCode", parseInt(val) as any)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select reason" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {Object.entries(DEDUCTION_REASON_LABELS).map(([code, label]) => (
+                      <SelectItem key={code} value={code}>
+                        {label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
                 {errors.deductionReasonCode && <p className="text-sm text-destructive mt-1">{errors.deductionReasonCode.message}</p>}
               </div>}
 
